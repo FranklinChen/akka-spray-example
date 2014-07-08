@@ -1,21 +1,23 @@
+val sprayVersion = "1.3.1"
+val akkaVersion = "2.3.3"
+
 name := "sample-akka-project"
+
+organization := "net.lockney"
 
 version := "0.0.1"
 
-organization := "janrain.sample"
+scalaVersion := "2.10.4"
 
-scalaVersion := "2.10.2"
-
-resolvers ++= Seq(
-  "spray" at "http://repo.spray.io/",
-  "Spray Nightlies" at "http://nightlies.spray.io/"
-)
+resolvers += "spray" at "http://repo.spray.io/"
 
 libraryDependencies ++= Seq(
-  "io.spray" % "spray-can" % "1.2-20130712",
-  "io.spray" % "spray-httpx" % "1.2-20130712",
-  "io.spray" %%  "spray-json" % "1.2.5",
-  "com.typesafe.akka" %% "akka-actor" % "2.2.0",
-  "com.typesafe.akka" %% "akka-slf4j" % "2.2.0",
-  "ch.qos.logback" % "logback-classic" % "1.0.0"
+  "io.spray" % "spray-can" % sprayVersion,
+  "io.spray" % "spray-httpx" % sprayVersion,
+  "io.spray" %%  "spray-json" % "1.2.6",
+  "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+  "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
+  "ch.qos.logback" % "logback-classic" % "1.1.2"
 )
+
+Revolver.settings

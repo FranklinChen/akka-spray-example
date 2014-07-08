@@ -1,12 +1,12 @@
-package janrain.sample
+package net.lockney
 
 import akka.actor._
 import akka.io.IO
+import akka.routing.RoundRobinPool
 import spray.can.Http
+import spray.http.HttpMethods._
+import spray.http.MediaTypes._
 import spray.http._
-import HttpMethods._
-import MediaTypes._
-import akka.routing.RoundRobinRouter
 
 class RequestHandler extends Actor {
   def receive = {
@@ -15,6 +15,9 @@ class RequestHandler extends Actor {
 
     case HttpRequest(GET, Uri.Path("/"), _, _, _) ⇒
       sender ! HttpResponse(entity = HttpEntity(`text/plain`, "hello!"))
+
+    case HttpRequest(GET, Uri.Path("/bye"), _, _, _) ⇒
+      sender ! HttpResponse(entity = HttpEntity(`text/plain`, "goodbye!"))
   }
 }
 
@@ -23,14 +26,14 @@ object MainActor {
 }
 
 class MainActor extends Actor {
-  import MainActor.Start
+  import net.lockney.MainActor.Start
 
   implicit val system = context.system
 
   def receive: Receive = {
     case Start ⇒
       val handler: ActorRef =
-        context.actorOf(Props[RequestHandler].withRouter(RoundRobinRouter(nrOfInstances = 10)))
+        context.actorOf(Props[RequestHandler].withRouter(RoundRobinPool(nrOfInstances = 10)))
       IO(Http) ! Http.Bind(handler, interface = "localhost", port = 9090)
   }
 }
